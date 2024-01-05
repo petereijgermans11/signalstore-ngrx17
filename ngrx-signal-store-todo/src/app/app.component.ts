@@ -28,5 +28,4 @@ export class AppComponent {
     this.form.reset();
   }
 
-  title = 'ngrx-signal-store-todo';
 }
