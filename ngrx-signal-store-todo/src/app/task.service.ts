@@ -1,14 +1,14 @@
 
 import { Injectable } from '@angular/core';
 import { Observable, lastValueFrom, of } from 'rxjs';
-import { Todo } from './models/todo';
+import { Task } from './models/task';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TodoService {
+export class TaskService {
 
-  private todoList: Todo[] = [
+  private todoList: Task[] = [
     { id: '1', value: 'Complete task A', done: false },
     { id: '2', value: 'Read a book', done: true },
     { id: '3', value: 'Learn Angular', done: false },
@@ -16,7 +16,7 @@ export class TodoService {
 
   constructor() { }
 
-  getItems() : Observable<Todo[]> {
+  getItems() : Observable<Task[]> {
     return of(this.todoList);
   }
 
@@ -24,13 +24,13 @@ export class TodoService {
     return lastValueFrom(this.getItems());
   }
 
-  getItem(id: string): Observable<Todo | undefined> {
+  getItem(id: string): Observable<Task | undefined> {
     const todo = this.todoList.find(t => t.id === id);
     return of(todo);
   }
 
-  addItem(value: string): Observable<Todo> {
-    const newTodo: Todo = {
+  addItem(value: string): Observable<Task> {
+    const newTodo: Task = {
       id: (this.todoList.length + 1).toString(), // Generating a simple incremental ID
       value,
       done: false
@@ -41,7 +41,7 @@ export class TodoService {
     return of(newTodo);
   }
 
-  updateItem(updatedTodo: Todo): Observable<Todo> {
+  updateItem(updatedTodo: Task): Observable<Task> {
     const index = this.todoList.findIndex(todo => todo.id === updatedTodo.id);
     if (index !== -1) {
       this.todoList[index] = updatedTodo;
@@ -50,7 +50,7 @@ export class TodoService {
     return of(updatedTodo);
   }
 
-  deleteItem(todo: Todo): Observable<Todo> {
+  deleteItem(todo: Task): Observable<Task> {
     this.todoList = this.todoList.filter(t => t.id !== todo.id);
     return of(todo);
   }

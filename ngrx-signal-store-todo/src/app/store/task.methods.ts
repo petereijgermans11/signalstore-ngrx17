@@ -8,20 +8,20 @@ import {
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap } from 'rxjs';
-import { Todo } from '../models/todo';
-import { TodoService } from '../todo.service';
-import { TodoState } from './todo.state';
+import { Task } from '../models/task';
+import { TaskService } from '../task.service';
+import { TaskState } from './taskState';
 
-export function withTodosMethods() {
+export function withTasksMethods() {
   return signalStoreFeature(
-    { state: type<TodoState>() },
-    withMethods((store, todoService = inject(TodoService)) => ({
-      loadAllTodos: rxMethod<void>(
+    { state: type<TaskState>() },
+    withMethods((store, taskService = inject(TaskService)) => ({
+      loadAllTasks: rxMethod<void>(
         pipe(
           switchMap(() => {
             patchState(store, { loading: true });
 
-            return todoService.getItems().pipe(
+            return taskService.getItems().pipe(
               tapResponse({
                 next: (items) => patchState(store, { items }),
                 error: console.error,
@@ -31,19 +31,19 @@ export function withTodosMethods() {
           })
         )
       ),
-      async loadAllTodosByPromise() {
+      async loadAllTasksByPromise() {
         patchState(store, { loading: true });
 
-        const items = await todoService.getItemsAsPromise();
+        const items = await taskService.getItemsAsPromise();
 
         patchState(store, { items, loading: false });
       },
-      addTodo: rxMethod<string>(
+      addTask: rxMethod<string>(
         pipe(
           switchMap((value) => {
             patchState(store, { loading: true });
 
-            return todoService.addItem(value).pipe(
+            return taskService.addItem(value).pipe(
               tapResponse({
                 next: (item) =>
                   patchState(store, { items: [...store.items(), item] }),
@@ -54,20 +54,20 @@ export function withTodosMethods() {
           })
         )
       ),
-      moveToDone: rxMethod<Todo>(
+      moveToDone: rxMethod<Task>(
         pipe(
-          switchMap((todo) => {
+          switchMap((task) => {
             patchState(store, { loading: true });
 
-            const toSend = { ...todo, done: !todo.done };
+            const toSend = { ...task, done: !task.done };
 
-            return todoService.updateItem(toSend).pipe(
+            return taskService.updateItem(toSend).pipe(
               tapResponse({
-                next: (updatedTodo) => {
+                next: (updatedTask) => {
                   const allItems = [...store.items()];
-                  const index = allItems.findIndex((x) => x.id === todo.id);
+                  const index = allItems.findIndex((x) => x.id === task.id);
 
-                  allItems[index] = updatedTodo;
+                  allItems[index] = updatedTask;
 
                   patchState(store, {
                     items: allItems,
@@ -81,16 +81,16 @@ export function withTodosMethods() {
         )
       ),
 
-      deleteTodo: rxMethod<Todo>(
+      deleteTask: rxMethod<Task>(
         pipe(
-          switchMap((todo) => {
+          switchMap((task) => {
             patchState(store, { loading: true });
 
-            return todoService.deleteItem(todo).pipe(
+            return taskService.deleteItem(task).pipe(
               tapResponse({
                 next: () => {
                   patchState(store, {
-                    items: [...store.items().filter((x) => x.id !== todo.id)],
+                    items: [...store.items().filter((x) => x.id !== task.id)],
                   });
                 },
                 error: console.error,

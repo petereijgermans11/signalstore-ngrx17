@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
-import { TodoStore } from './store/todo.state';
+import { TaskStore } from './store/taskState';
 
 @Component({
   selector: 'app-root',
@@ -10,21 +10,21 @@ import { TodoStore } from './store/todo.state';
   imports: [CommonModule, RouterOutlet, ReactiveFormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
-  providers: [TodoStore],
+  providers: [TaskStore],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  readonly store = inject(TodoStore);
+  readonly store = inject(TaskStore);
 
   private readonly formbuilder = inject(FormBuilder);
 
   form = this.formbuilder.group({
-    todoValue: ['', Validators.required],
+    taskValue: ['', Validators.required],
     done: [false],
   });
 
-  addTodo() {
-    this.store.addTodo(this.form.value.todoValue);
+  addTask() {
+    this.store.addTask(this.form.value.taskValue);
     this.form.reset();
   }
 

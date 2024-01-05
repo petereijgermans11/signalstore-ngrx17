@@ -5,20 +5,20 @@
         <div class="card" style="border-radius: 15px">
           <div class="card-body p-5">
             <h6 class="mb-3">
-              Awesome Todo List ({{ store.doneCount() }}/{{
+              Awesome Task List ({{ store.doneCount() }}/{{
                 store.undoneCount()
               }}
               {{ store.percentageDone() | number : "1.0-0" }}% done)
             </h6>
 
             <form
-              (ngSubmit)="addTodo()"
+              (ngSubmit)="addTask()"
               class="d-flex justify-content-center align-items-center mb-4"
               [formGroup]="form"
             >
               <div class="form-outline flex-fill">
                 <input
-                  formControlName="todoValue"
+                  formControlName="taskValue"
                   type="text"
                   id="form1"
                   class="form-control form-control-lg"
@@ -52,7 +52,7 @@
                 <button
                   type="button"
                   class="btn btn-danger btn-sm"
-                  (click)="store.deleteTodo(item)"
+                  (click)="store.deleteTask(item)"
                 >
                   Delete
                 </button>

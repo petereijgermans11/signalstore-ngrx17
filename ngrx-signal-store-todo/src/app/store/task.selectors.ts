@@ -1,10 +1,10 @@
 import { computed } from '@angular/core';
 import { signalStoreFeature, type, withComputed } from '@ngrx/signals';
-import { TodoState } from './todo.state';
+import { TaskState } from './taskState';
 
-export function withTodosSelectors() {
+export function withTasksSelectors() {
   return signalStoreFeature(
-    { state: type<TodoState>() },
+    { state: type<TaskState>() },
     withComputed(({ items }) => ({
       doneCount: computed(() => items().filter((x) => x.done).length),
       undoneCount: computed(() => items().filter((x) => !x.done).length),
