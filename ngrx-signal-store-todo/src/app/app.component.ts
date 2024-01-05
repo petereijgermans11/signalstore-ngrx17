@@ -20,7 +20,7 @@ export class AppComponent {
 
   form = this.formbuilder.group({
     taskValue: ['', Validators.required],
-    done: [false],
+    completed: [false],
   });
 
   addTask() {

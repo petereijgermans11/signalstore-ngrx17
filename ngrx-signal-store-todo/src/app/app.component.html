@@ -1,62 +1,66 @@
 <section class="vh-100">
   <div class="container py-5 h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col col-xl-10">
-        <div class="card" style="border-radius: 15px">
+      <div class="col col-xl-8">
+        <div class="card bg-light text-dark shadow-lg">
           <div class="card-body p-5">
-            <h6 class="mb-3">
-              Awesome Task List ({{ store.doneCount() }}/{{
-                store.undoneCount()
-              }}
-              {{ store.percentageDone() | number : "1.0-0" }}% done)
-            </h6>
 
-            <form
-              (ngSubmit)="addTask()"
-              class="d-flex justify-content-center align-items-center mb-4"
-              [formGroup]="form"
-            >
-              <div class="form-outline flex-fill">
-                <input
-                  formControlName="taskValue"
-                  type="text"
-                  id="form1"
-                  class="form-control form-control-lg"
-                />
+            <h2 class="card-title text-center mb-4">Task List</h2>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <div>
+                {{ store.completedCount() }}/{{ store.notCompletedCount() }}
+                <span class="text-success">
+                  ({{ store.percentageCompleted() | number : "1.0-0" }}% completed)
+                </span>
               </div>
-              <button
-                type="submit"
-                [disabled]="form.invalid"
-                class="btn btn-primary btn-lg ms-2"
-              >
-                Add
-              </button>
+              <div class="text-muted">
+                Add tasks and get things done!
+              </div>
+            </div>
+
+            <form (ngSubmit)="addTask()" class="mb-4" [formGroup]="form">
+              <div class="input-group">
+                <input
+                    formControlName="taskValue"
+                    type="text"
+                    class="form-control form-control-lg"
+                    placeholder="Add a new task..."
+                />
+                <button
+                    type="submit"
+                    [disabled]="form.invalid"
+                    class="btn btn-primary btn-lg"
+                >
+                  + Add
+                </button>
+              </div>
             </form>
 
-            <ul class="list-group mb-0">
+            <ul class="list-group">
               @for (item of store.items(); track item.id) {
-              <li
-                class="list-group-item d-flex justify-content-between align-items-center border-start-0 border-top-0 border-end-0 border-bottom rounded-0 mb-2"
-              >
-                <div class="d-flex align-items-center">
+              <li class="list-group-item d-flex justify-content-between align-items-center mb-3 bg-light">
+                <div class="form-check">
                   <input
-                    class="form-check-input me-2"
+                    class="form-check-input"
                     type="checkbox"
-                    [checked]="item.done"
+                    [checked]="item.completed"
                     value=""
                     aria-label="..."
-                    (click)="store.moveToDone(item)"
+                    (click)="store.moveToCompleted(item)"
                   />
-                  {{ item.value }}
-                </div>
-                <button
-                  type="button"
-                  class="btn btn-danger btn-sm"
-                  (click)="store.deleteTask(item)"
-                >
-                  Delete
-                </button>
-              </li>
+                  <label class="form-check-label {{ item.completed ? 'completed-task' : '' }}">
+              {{ item.value }}
+              </label>
+            </div>
+            <button
+              type="button"
+              class="btn btn-danger btn-sm"
+              (click)="store.deleteTask(item)"
+            >
+              Delete
+            </button>
+          </li>
               }
             </ul>
           </div>

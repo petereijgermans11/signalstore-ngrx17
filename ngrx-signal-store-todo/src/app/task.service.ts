@@ -9,9 +9,9 @@ import { Task } from './models/task';
 export class TaskService {
 
   private todoList: Task[] = [
-    { id: '1', value: 'Complete task A', done: false },
-    { id: '2', value: 'Read a book', done: true },
-    { id: '3', value: 'Learn Angular', done: false },
+    { id: '1', value: 'Complete task A', completed: false },
+    { id: '2', value: 'Read a book', completed: true },
+    { id: '3', value: 'Learn Angular', completed: false },
   ];
 
   constructor() { }
@@ -33,7 +33,7 @@ export class TaskService {
     const newTodo: Task = {
       id: (this.todoList.length + 1).toString(), // Generating a simple incremental ID
       value,
-      done: false
+      completed: false
     };
 
     this.todoList = [...this.todoList, newTodo];

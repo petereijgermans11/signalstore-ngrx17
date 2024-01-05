@@ -54,12 +54,12 @@ export function withTasksMethods() {
           })
         )
       ),
-      moveToDone: rxMethod<Task>(
+      moveToCompleted: rxMethod<Task>(
         pipe(
           switchMap((task) => {
             patchState(store, { loading: true });
 
-            const toSend = { ...task, done: !task.done };
+            const toSend = { ...task, completed: !task.completed };
 
             return taskService.updateItem(toSend).pipe(
               tapResponse({
