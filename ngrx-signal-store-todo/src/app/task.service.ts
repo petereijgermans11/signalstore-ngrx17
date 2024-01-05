@@ -8,7 +8,7 @@ import { Task } from './models/task';
 })
 export class TaskService {
 
-  private todoList: Task[] = [
+  private taskList: Task[] = [
     { id: '1', value: 'Complete task A', completed: false },
     { id: '2', value: 'Read a book', completed: true },
     { id: '3', value: 'Learn Angular', completed: false },
@@ -16,42 +16,42 @@ export class TaskService {
 
   constructor() { }
 
-  getItems() : Observable<Task[]> {
-    return of(this.todoList);
+  getTasks() : Observable<Task[]> {
+    return of(this.taskList);
   }
 
-    getItemsAsPromise() {
-    return lastValueFrom(this.getItems());
+    getTasksAsPromise() {
+    return lastValueFrom(this.getTasks());
   }
 
-  getItem(id: string): Observable<Task | undefined> {
-    const todo = this.todoList.find(t => t.id === id);
-    return of(todo);
+  getTask(id: string): Observable<Task | undefined> {
+    const task = this.taskList.find(t => t.id === id);
+    return of(task);
   }
 
-  addItem(value: string): Observable<Task> {
-    const newTodo: Task = {
-      id: (this.todoList.length + 1).toString(), // Generating a simple incremental ID
+  addTask(value: string): Observable<Task> {
+    const newTask: Task = {
+      id: (this.taskList.length + 1).toString(), // Generating a simple incremental ID
       value,
       completed: false
     };
 
-    this.todoList = [...this.todoList, newTodo];
+    this.taskList = [...this.taskList, newTask];
 
-    return of(newTodo);
+    return of(newTask);
   }
 
-  updateItem(updatedTodo: Task): Observable<Task> {
-    const index = this.todoList.findIndex(todo => todo.id === updatedTodo.id);
+  updateTask(updatedTask: Task): Observable<Task> {
+    const index = this.taskList.findIndex(task => task.id === updatedTask.id);
     if (index !== -1) {
-      this.todoList[index] = updatedTodo;
+      this.taskList[index] = updatedTask;
     }
 
-    return of(updatedTodo);
+    return of(updatedTask);
   }
 
-  deleteItem(todo: Task): Observable<Task> {
-    this.todoList = this.todoList.filter(t => t.id !== todo.id);
-    return of(todo);
+  deleteTask(task: Task): Observable<Task> {
+    this.taskList = this.taskList.filter(t => t.id !== task.id);
+    return of(task);
   }
 }

@@ -4,12 +4,12 @@ import { withTasksMethods } from './task.methods';
 import { withTasksSelectors } from './task.selectors';
 
 export interface TaskState {
-  items: Task[];
+  tasks: Task[];
   loading: boolean;
 }
 
 export const initialState: TaskState = {
-  items: [],
+  tasks: [],
   loading: false,
 };
 

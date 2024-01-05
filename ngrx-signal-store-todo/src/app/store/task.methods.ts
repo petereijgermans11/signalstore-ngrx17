@@ -21,9 +21,9 @@ export function withTasksMethods() {
           switchMap(() => {
             patchState(store, { loading: true });
 
-            return taskService.getItems().pipe(
+            return taskService.getTasks().pipe(
               tapResponse({
-                next: (items) => patchState(store, { items }),
+                next: (tasks) => patchState(store, { tasks }),
                 error: console.error,
                 finalize: () => patchState(store, { loading: false }),
               })
@@ -34,19 +34,19 @@ export function withTasksMethods() {
       async loadAllTasksByPromise() {
         patchState(store, { loading: true });
 
-        const items = await taskService.getItemsAsPromise();
+        const tasks = await taskService.getTasksAsPromise();
 
-        patchState(store, { items, loading: false });
+        patchState(store, { tasks, loading: false });
       },
       addTask: rxMethod<string>(
         pipe(
           switchMap((value) => {
             patchState(store, { loading: true });
 
-            return taskService.addItem(value).pipe(
+            return taskService.addTask(value).pipe(
               tapResponse({
-                next: (item) =>
-                  patchState(store, { items: [...store.items(), item] }),
+                next: (task) =>
+                  patchState(store, { tasks: [...store.tasks(), task] }),
                 error: console.error,
                 finalize: () => patchState(store, { loading: false }),
               })
@@ -61,16 +61,16 @@ export function withTasksMethods() {
 
             const toSend = { ...task, completed: !task.completed };
 
-            return taskService.updateItem(toSend).pipe(
+            return taskService.updateTask(toSend).pipe(
               tapResponse({
                 next: (updatedTask) => {
-                  const allItems = [...store.items()];
-                  const index = allItems.findIndex((x) => x.id === task.id);
+                  const allTasks = [...store.tasks()];
+                  const index = allTasks.findIndex((x) => x.id === task.id);
 
-                  allItems[index] = updatedTask;
+                  allTasks[index] = updatedTask;
 
                   patchState(store, {
-                    items: allItems,
+                      tasks: allTasks,
                   });
                 },
                 error: console.error,
@@ -86,11 +86,11 @@ export function withTasksMethods() {
           switchMap((task) => {
             patchState(store, { loading: true });
 
-            return taskService.deleteItem(task).pipe(
+            return taskService.deleteTask(task).pipe(
               tapResponse({
                 next: () => {
                   patchState(store, {
-                    items: [...store.items().filter((x) => x.id !== task.id)],
+                    tasks: [...store.tasks().filter((x) => x.id !== task.id)],
                   });
                 },
                 error: console.error,
